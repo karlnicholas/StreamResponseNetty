@@ -2,7 +2,6 @@ package org.example.streamresponsenetty.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.streamresponsenetty.dto.AppResponse;
-import org.example.streamresponsenetty.event.CustomEvent;
 import org.example.streamresponsenetty.event.CustomEventPublisher;
 import org.example.streamresponsenetty.service.AppService;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -34,8 +33,8 @@ public class AppController {
         Flux<DataBuffer> dataBufferFlux = Flux.create(sink -> {
             AtomicBoolean first = new AtomicBoolean(false);
             eventPublisher.registerListener(event -> {
-                if (event instanceof CustomEvent) {
-                    AppResponse appResponse = ((CustomEvent) event).getAppResponse();
+                if (event != null) {
+                    AppResponse appResponse = event.getAppResponse();
                     try {
                         // Convert AppResponse object to JSON
                         String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(appResponse.getData());  // Now serializing AppResponseData

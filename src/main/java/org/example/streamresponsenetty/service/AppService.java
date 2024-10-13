@@ -1,6 +1,7 @@
 package org.example.streamresponsenetty.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.streamresponsenetty.dto.AppResponse;
 import org.example.streamresponsenetty.dto.AppResponseData;
 import org.example.streamresponsenetty.event.CustomEventPublisher;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppService {
     private final CustomEventPublisher customEventPublisher;
 
@@ -17,8 +19,11 @@ public class AppService {
             try {
                 Thread.sleep(1000); // Simulate delay
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                log.error(e.getMessage());
+                /* Clean up whatever needs to be handled before interrupting  */
+                Thread.currentThread().interrupt();
             }
+
             AppResponse appResponse = AppResponse.builder()
                     .last(i == count - 1)
                     .data(AppResponseData.builder()
